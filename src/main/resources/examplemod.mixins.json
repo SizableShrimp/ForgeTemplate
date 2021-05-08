@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "${project.group}.mixins",
+  "package": "${project.group}.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "${mod_id}.refmap.json",
   "mixins": [],
