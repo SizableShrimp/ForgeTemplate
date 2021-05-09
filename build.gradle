@@ -1,15 +1,11 @@
 buildscript {
     repositories {
-        mavenLocal {
-            content {
-                includeGroup 'net.minecraftforge.gradle'
-            }
-        }
+        maven { url = 'https://sizableshrimp.me/maven' }
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath group: 'me.sizableshrimp.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
