@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'me.sizableshrimp.gradle', name: 'ForgeGradle', version: '5.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.8-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -193,6 +193,13 @@ task replaceResources(type: Copy) {
         copy {
             with spec
             into "$rootDir/out/production/${project.name}.main/"
+        }
+    }
+    // If Eclipse's output dir exists, copy it there as well
+    if (new File("$rootDir/bin/main/").exists()) {
+        copy {
+            with spec
+            into "$rootDir/bin/main/"
         }
     }
 }

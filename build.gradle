@@ -179,6 +179,13 @@ task replaceResources(type: Copy) {
             into "$rootDir/out/production/${project.name}.main/"
         }
     }
+    // If Eclipse's output dir exists, copy it there as well
+    if (new File("$rootDir/bin/main/").exists()) {
+        copy {
+            with spec
+            into "$rootDir/bin/main/"
+        }
+    }
 }
 
 processResources {
