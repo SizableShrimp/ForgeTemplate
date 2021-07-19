@@ -52,6 +52,9 @@ minecraft {
             // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
 
+            // Disable the early progress window for M1 macs
+            property 'fml.earlyprogresswindow', 'false'
+
             // Recommended logging level for the console
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
@@ -141,6 +144,12 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+
+    // For LWJGL snapshot builds
+    maven {
+        name = 'Sonatype'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
 }
 
 dependencies {
@@ -148,6 +157,14 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Replace LWJGL versions with snapshot builds for runtime only
+    runtimeOnly 'org.lwjgl:lwjgl-jemalloc:3.3.0-SNAPSHOT'
+    runtimeOnly 'org.lwjgl:lwjgl-openal:3.3.0-SNAPSHOT'
+    runtimeOnly 'org.lwjgl:lwjgl-opengl:3.3.0-SNAPSHOT'
+    runtimeOnly 'org.lwjgl:lwjgl-glfw:3.3.0-SNAPSHOT'
+    runtimeOnly 'org.lwjgl:lwjgl-stb:3.3.0-SNAPSHOT'
+    runtimeOnly 'org.lwjgl:lwjgl-tinyfd:3.3.0-SNAPSHOT'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -186,6 +203,56 @@ processResources {
                     expand replaceProperties
                 }
                 into target
+            }
+        }
+    }
+}
+
+import net.minecraftforge.gradle.common.task.ExtractNatives
+import net.minecraftforge.gradle.common.util.Utils
+import net.minecraftforge.gradle.common.util.VersionJson
+import org.apache.commons.io.FileUtils
+
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+task extratLwjglNatives(type: ExtractLwjglNatives) {
+    meta = tasks.extractNatives.meta
+    output = tasks.extractNatives.output
+}
+
+extractNatives {
+    finalizedBy extratLwjglNatives
+}
+
+// Extract LWJGL natives from the native JARs provided by LWJGL on Sonatype
+abstract class ExtractLwjglNatives extends ExtractNatives {
+    @TaskAction
+    void run() {
+        def os = VersionJson.OS.current
+        def osName = os == VersionJson.OS.OSX ? 'macos' : os.name
+        def classifier = osName
+        if (['aarch64', 'arm64'].contains(System.getProperty('os.arch')))
+            classifier += '-arm64'
+        def json = Utils.loadJson(meta, VersionJson.class)
+        json.getNatives().each {
+            if (it.path.startsWith('org/lwjgl')) {
+                def version = '3.3.0-20210325.222416-6'
+                def type = it.path.split(/\//)[2]
+                def path = "org/lwjgl/$type/3.3.0-SNAPSHOT/$type-$version-natives-${classifier}.jar"
+                def target = Utils.getCache(getProject(), 'libraries', path)
+                def url = new URL("https://oss.sonatype.org/content/repositories/snapshots/$path")
+                if (!target.exists()) {
+                    if (!target.getParentFile().exists()) {
+                        target.getParentFile().mkdirs()
+                    }
+                    FileUtils.copyURLToFile(url, target)
+                }
+                def rootPath = FileSystems.newFileSystem(target.toPath(), null).getPath('/')
+                Files.walk(rootPath.resolve(osName)).filter { Files.isRegularFile(it) }.each {
+                    Files.copy(it, output.toPath().resolve(it.fileName.toString()), StandardCopyOption.REPLACE_EXISTING)
+                }
             }
         }
     }
