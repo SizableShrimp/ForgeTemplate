@@ -179,37 +179,32 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
-def resource_targets = ["META-INF/mods.toml", "pack.mcmeta", "${mod_id}.mixins.json"]
-def into_targets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
+// This block of code expands all the gradle properties in the specified resource targets.
+// It copies them into the targets and expands all the defined properties.
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', "${mod_id}.mixins.json"]
+def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
 def properties = [mod_id: mod_id, mod_name: mod_name, mod_version: mod_version,
         mod_authors: mod_authors, mod_description: mod_description,
         minecraft_version_range: minecraft_version_range, forge_version_range: forge_version_range,
         loader_version_range: loader_version_range]
 processResources {
-    duplicatesStrategy = 'INCLUDE'
     inputs.properties properties
     properties.put 'project', project
 
-    def spec = copySpec {
-        from(sourceSets.main.resources) {
-            include resource_targets
-            expand properties
-        }
+    filesMatching(resourceTargets) {
+        expand properties
     }
 
-    with spec
-    into_targets.each {
-        def file = file(it)
-        if (file.exists()) {
+    intoTargets.each { target ->
+        if (file(target).exists()) {
             copy {
-                with spec
-                into file
+                from(sourceSets.main.resources) {
+                    include resourceTargets
+                    expand properties
+                }
+                into target
             }
         }
-    }
-
-    from(sourceSets.main.resources) {
-        exclude resource_targets
     }
 }
 
