@@ -167,7 +167,7 @@ def replaceProperties = [mod_id: mod_id, mod_name: mod_name, mod_version: mod_ve
         loader_version_range: loader_version_range]
 processResources {
     inputs.properties replaceProperties
-    properties.put 'project', project
+    replaceProperties.put 'project', project
 
     filesMatching(resourceTargets) {
         expand replaceProperties
