@@ -1,10 +1,10 @@
 {
   "required": true,
   "package": "${project.group}.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "refmap": "${mod_id}.refmap.json",
   "mixins": [],
   "client": [],
   "server": [],
-  "minVersion": "0.8"
+  "minVersion": "0.8.4"
 }
