@@ -5,6 +5,5 @@
   "refmap": "${mod_id}.refmap.json",
   "mixins": [],
   "client": [],
-  "server": [],
   "minVersion": "0.8.4"
 }
