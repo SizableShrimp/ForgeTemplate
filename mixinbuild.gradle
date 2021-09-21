@@ -62,9 +62,6 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            // Export mixin-changed classes
-            property 'mixin.debug.export', 'true'
-
             // These arguments allow for optional authentication with Mojang servers.
             // If you want to authenticate, put these properties in GRADLE_HOME/gradle.properties.
             // By default, this is C:\Users\<your username>\.gradle\gradle.properties on Windows or ~/.gradle/gradle.properties on Linux/MacOS.
@@ -81,9 +78,6 @@ minecraft {
                 // You may be able to find it in your .minecraft folder in launcher_accounts.json or launcher_profiles.json.
                 args '--accessToken', project.getProperty('mc_accessToken')
             }
-
-            // Add mixin config to runtime
-            args '-mixin.config=' + project.getProperty('mod_id') + '.mixins.json'
 
             mods {
                 "${mod_id}" {
@@ -107,12 +101,6 @@ minecraft {
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            // Export mixin-changed classes
-            property 'mixin.debug.export', 'true'
-
-            // Add mixin config to runtime
-            args '-mixin.config=' + project.getProperty('mod_id') + '.mixins.json'
-
             mods {
                 "${mod_id}" {
                     source sourceSets.main
@@ -134,12 +122,6 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
-
-            // Export mixin-changed classes
-            property 'mixin.debug.export', 'true'
-
-            // Add mixin config to runtime
-            args '-mixin.config=' + project.getProperty('mod_id') + '.mixins.json'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -168,6 +150,12 @@ repositories {
 
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
+
+    // Sets up the mixin config; this gets added to run configurations and the manifest in the final jar
+    config "${mod_id}.mixins.json"
+
+    // Enables exporting mixin-changed classes to .mixin.out in the run folder
+    debug.export = true
 }
 
 dependencies {
@@ -230,8 +218,7 @@ jar {
                 "Implementation-Title": project.name,
                 "Implementation-Version": mod_version,
                 "Implementation-Vendor": mod_authors,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "${mod_id}.mixins.json"
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
