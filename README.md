@@ -1,6 +1,6 @@
 # ForgeTemplate
 
-A simple template based off of the [MDK](https://github.com/MinecraftForge/MinecraftForge/tree/1.16.x/mdk) that I use to create new projects quicker by extracting all mod-related info to `gradle.properties`.
+A simple template based off of the [MDK](https://github.com/MinecraftForge/MinecraftForge/tree/1.17.x/mdk) that I use to create new projects quicker by extracting all mod-related info to `gradle.properties`.
 **This does not do the work for you.** It only makes the initial Gradle setup easier and less tedious.
 
 ## Setting up
