@@ -4,7 +4,7 @@ A simple template based off of the [MDK](https://github.com/MinecraftForge/Minec
 
 ## Setting up
 * Open up `gradle.properties` and change all the necessary properties
-* Rename the main package to be the same as `${mod_base_package}.${mod_id}`, e.g. `me.sizableshrimp.examplemod`
+* Rename the main package to be the same as `${mod_base_package}`, e.g. `me.sizableshrimp.examplemod`
 
 ### Using mixins?
 * Delete `build.gradle`

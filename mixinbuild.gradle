@@ -20,7 +20,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = "${minecraft_version}-${mod_version}"
-group = "${mod_base_package}.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "${mod_base_package}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = mod_id
 
 // Mojang ships Java 8 to end users, so your mod should target Java 8.
