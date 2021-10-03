@@ -17,7 +17,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = "${minecraft_version}-${mod_version}"
-group = "${mod_base_package}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = mod_base_package // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = mod_id
 
 // Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
@@ -196,13 +196,13 @@ processResources {
 jar {
     manifest {
         attributes([
-                "Specification-Title": mod_id,
-                "Specification-Vendor": mod_authors,
-                "Specification-Version": "1", // We are version 1 of ourselves
-                "Implementation-Title": project.name,
-                "Implementation-Version": mod_version,
-                "Implementation-Vendor": mod_authors,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                'Specification-Title': mod_id,
+                'Specification-Vendor': mod_authors,
+                'Specification-Version': '1', // We are version 1 of ourselves
+                'Implementation-Title': project.name,
+                'Implementation-Version': mod_version,
+                'Implementation-Vendor': mod_authors,
+                'Implementation-Timestamp': new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ')
         ])
     }
 }
