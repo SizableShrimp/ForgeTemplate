@@ -2,16 +2,18 @@ buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
+
+plugins {
+    id 'wtf.gofancy.fancygradle' version '1.+'
+}
+
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -143,6 +145,9 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+
+    // Provides a fixed LegacyDev version for assets
+    maven { url = 'https://sizableshrimp.me/maven' }
 }
 
 dependencies {
@@ -164,14 +169,20 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+import wtf.gofancy.fancygradle.patch.Patch
+
+fancyGradle {
+    patches {
+        patch(Patch.CODE_CHICKEN_LIB, Patch.ASM)
+    }
+}
+
 // This block of code expands all the gradle properties in the specified resource targets.
 // It copies them into the targets and expands all the defined properties.
-def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def resourceTargets = ['mcmod.info', 'pack.mcmeta']
 def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
 def replaceProperties = [mod_id: mod_id, mod_name: mod_name, mod_version: mod_version,
-        mod_authors: mod_authors, mod_description: mod_description,
-        minecraft_version_range: minecraft_version_range, forge_version_range: forge_version_range,
-        loader_version_range: loader_version_range]
+        mod_authors: mod_authors, mod_description: mod_description.replace('\n', '\\n'), minecraft_version: minecraft_version]
 processResources {
     inputs.properties replaceProperties
     replaceProperties.put 'project', project
@@ -191,6 +202,29 @@ processResources {
             }
         }
     }
+}
+
+def modFileTokens = [VERSION: mod_version]
+def included = ["${mod_base_package.replace('.', '/')}/${mod_main_class}.java".toString()]
+
+def expandedSrc = new File(project.buildDir, 'expandedSrc')
+def srcMainJava = project.file('src/main/java').toPath()
+def includedPaths = included.collect { java.nio.file.Paths.get(it) }
+task javaReplaceTokens(type: Copy) {
+    inputs.property 'tokens', modFileTokens
+    from(srcMainJava) {
+        include included
+    }
+    into expandedSrc
+    filter(org.apache.tools.ant.filters.ReplaceTokens, beginToken: '@', endToken: '@', tokens: modFileTokens)
+}
+
+compileJava {
+    dependsOn javaReplaceTokens
+    exclude {
+        srcMainJava.relativize(it.file.toPath()) in includedPaths
+    }
+    source expandedSrc
 }
 
 jar {
