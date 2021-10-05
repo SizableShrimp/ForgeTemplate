@@ -139,11 +139,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
-import wtf.gofancy.fancygradle.patch.Patch
-
 fancyGradle {
     patches {
-        patch(Patch.CODE_CHICKEN_LIB, Patch.ASM)
+        patch(wtf.gofancy.fancygradle.patch.Patch.CODE_CHICKEN_LIB, wtf.gofancy.fancygradle.patch.Patch.ASM)
     }
 }
 
