@@ -8,7 +8,7 @@ A simple template based off of the [MDK](https://github.com/MinecraftForge/Minec
 * Rename the main package to be the same as `mod_base_package` in the properties file, e.g. `me.sizableshrimp.examplemod`
 
 ### Using mixins?
-#### NOTE: Mixin is shipped in Forge 1.17.1 as of `37.0.59`. Make sure to set this as the minimum version in the `mods.toml` if you use Mixins!
+#### NOTE: Mixin is properly shipped in Forge 1.18 as of `38.0.6`. Make sure to set this as the minimum version in `forge_version_range` if you use Mixins!
 * Delete `build.gradle`
 * Rename `mixinbuild.gradle` to `build.gradle`
 * Rename `examplemod.mixins.json` to start with your mod id

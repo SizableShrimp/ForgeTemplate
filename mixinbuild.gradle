@@ -23,8 +23,8 @@ version = "${minecraft_version}-${mod_version}"
 group = mod_base_package // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = mod_id
 
-// Mojang ships Java 16 to end users in 1.17+ instead of Java 8 in 1.16 or lower, so your mod should target Java 16.
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -164,12 +164,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Prevent Mixin annotation processor from getting into IntelliJ's annotation processor settings
-    // This allows 'Settings > Build, Execution, and Deployment > Build Tools > Gradle > Build and run using' set to IntelliJ to work correctly
-    if (System.getProperty('idea.sync.active') != 'true') {
-        // Mixin annotation processor - generates the refmap
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-    }
+    // Mixin annotation processor - generates the refmap
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
