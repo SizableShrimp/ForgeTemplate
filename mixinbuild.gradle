@@ -163,12 +163,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Prevent Mixin annotation processor from getting into IntelliJ's annotation processor settings
-    // This allows 'Settings > Build, Execution, and Deployment > Build Tools > Gradle > Build and run using' set to IntelliJ to work correctly
-    if (System.getProperty('idea.sync.active') != 'true') {
-        // Mixin annotation processor - generates the refmap
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-    }
+    // Mixin annotation processor - generates the refmap
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
