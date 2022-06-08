@@ -17,13 +17,13 @@ public class ExampleMod {
 
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
-        // do something when the setup is run on both client and server
+        // Do something when the setup is run on both client and server
         LOGGER.info("HELLO from common setup!");
     }
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        // do something when the setup is run on only the client
+        // Do something when the setup is run on only the client
         LOGGER.info("HELLO from client setup!");
     }
 }

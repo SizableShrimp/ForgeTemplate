@@ -1,6 +1,6 @@
 # ForgeTemplate
 
-A simple template based off of the [MDK](https://github.com/MinecraftForge/MinecraftForge/tree/1.17.x/mdk) that I use to create new projects quicker by extracting all mod-related info to `gradle.properties`.
+A simple template based off of the [MDK](https://github.com/MinecraftForge/MinecraftForge/tree/1.19.x/mdk) that I use to create new projects quicker by extracting all mod-related info to `gradle.properties`.
 **This does not do the work for you.** It only makes the initial Gradle setup easier and less tedious.
 
 ## Setting up
@@ -8,7 +8,6 @@ A simple template based off of the [MDK](https://github.com/MinecraftForge/Minec
 * Rename the main package to be the same as `mod_base_package` in the properties file, e.g. `me.sizableshrimp.examplemod`
 
 ### Using mixins?
-#### NOTE: Mixin is properly shipped in Forge 1.18 as of `38.0.6`. Make sure to set this as the minimum version in `forge_version_range` if you use Mixins!
 * Delete `build.gradle`
 * Rename `mixinbuild.gradle` to `build.gradle`
 * Rename `examplemod.mixins.json` to start with your mod id
