@@ -5,13 +5,13 @@ A simple template based off of the [MDK](https://github.com/MinecraftForge/Minec
 
 ## Setting up
 * Open up `gradle.properties` and change all the necessary properties
-* Rename the main package to be the same as `mod_base_package` in the properties file, e.g. `me.sizableshrimp.examplemod`
+* Rename the main package to be the same as `mod_base_package` in the properties file, e.g. `com.example.examplemod`
 
 ### Using mixins?
 * Delete `build.gradle`
 * Rename `mixinbuild.gradle` to `build.gradle`
 * Rename `examplemod.mixins.json` to start with your mod id
-* Add mixins under the `mixin` package inside your main package, e.g. `me.sizableshrimp.examplemod.mixin`
+* Add mixins under the `mixin` package inside your main package, e.g. `com.example.examplemod.mixin`
 
 ### Not using mixins?
 * Delete `mixinbuild.gradle`
